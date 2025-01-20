@@ -14,5 +14,10 @@ export default defineConfig({
       fileName: "widget",
       formats: ["iife"], // Immediately Invoked Function Expression
     },
+    rollupOptions: {
+      output: {
+        assetFileNames: "widget.css", // Customize the CSS output name
+      },
+    },
   },
 });
