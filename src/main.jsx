@@ -6,7 +6,7 @@ import App from "./App";
 import "./index.css";
 
 // Render the main React application
-createRoot(document.getElementById("search-widget-root")).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <ChakraProvider>
       <App />
