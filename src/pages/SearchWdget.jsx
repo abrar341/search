@@ -20,7 +20,7 @@ const SearchWidget = () => {
   });
   useEffect(() => {
     // Check if `window.appConfig` is available
-    if (window?.appConfig) {
+    if (window.appConfig) {
       const { userId, siteId } = window.appConfig;
       setConfig({ userId, siteId });
     } else {
