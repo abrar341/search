@@ -14,15 +14,18 @@ import {
 const SearchWidget = () => {
 
 
-  const [config, setConfig] = useState({ userId: "", siteId: "" });
-
+  const [config, setConfig] = useState(() => {
+    // Set the initial hardcoded values
+    return { userId: "453", siteId: "435" };
+  });
   useEffect(() => {
     // Check if `window.appConfig` is available
-    if (window.appConfig) {
+    if (window?.appConfig) {
       const { userId, siteId } = window.appConfig;
       setConfig({ userId, siteId });
     } else {
       console.error("appConfig is not defined on the window object.");
+      // setConfig({ userId: "678ea507c58bddca1afec5d4", siteId: "6768b69f5fe75864249a7ce5" });
     }
   }, []);
 
@@ -35,8 +38,8 @@ const SearchWidget = () => {
   const [searchTerms, setSearchTerms] = useState([]); // State to hold search results
   const [searchPreference, setSearchPreference] = useState(null); // State to hold search preferences
   const [showResults, setShowResults] = useState(false); // State to toggle results display
-
   const { isOpen, onClose, onOpen } = useDisclosure();
+
 
   useEffect(() => {
     const fetchSearchPreference = async () => {
@@ -45,7 +48,6 @@ const SearchWidget = () => {
       try {
         const preferences = await getSearchPreference(userId, siteId);
         setSearchPreference(preferences?.data);
-
         // Fetching top search terms
         const searchTerms = await getTopSearchTerms(userId, siteId, 5);
         setSearchTerms(searchTerms?.data); // Assuming you have a state for top search terms
@@ -54,18 +56,14 @@ const SearchWidget = () => {
       }
     };
     fetchSearchPreference();
-  }, []); // Fetch search preferences on component mount
+  }, [config]); // Fetch search preferences on component mount
 
-  const handleSearch = async (searchQuery, userId, siteId) => {
-
-
+  const handleSearch = async (searchQuery) => {
     setInstanceIsLoading(true); // Set loading state to true
-
+    const userId = config?.userId;
+    const siteId = config?.siteId;
     try {
-      // Call the search API
       const data = await search(searchQuery, userId, siteId);
-
-      // Update search results state
       setSearchResults(data?.data);
     } catch (error) {
       console.error("Error calling search API:", error);
@@ -73,13 +71,10 @@ const SearchWidget = () => {
       setInstanceIsLoading(false); // Set loading state to false
     }
   };
-
   // Debounced version of handleSearch
   const debouncedSearch = useCallback(
     debounce((searchQuery) => {
-      const userId = config?.userId;
-      const siteId = config?.siteId;
-      handleSearch(searchQuery, userId, siteId);
+      handleSearch(searchQuery);
     }, DEBOUNCE_DELAY),
     []
   );
@@ -90,13 +85,14 @@ const SearchWidget = () => {
     debouncedSearch(value);
   };
   // console.log("searchPreference", searchPreference);
-
   const fuzzySearch = searchPreference?.searchEngineSettings?.fuzzySearch;
   const siteId = searchPreference?.siteId;
+  const userId = searchPreference?.userId;
   const collectionIds = searchPreference?.searchFrom?.collections || [];
   const searchResultLayout = searchPreference?.searchResultPageCustomization?.searchResultLayout || "";
   const InstanceSuggestedSearchTerms = searchPreference?.instantSearchWidgetCustomization.suggestedSearchTerms || "";
   const SearchSuggestedSearchTerms = searchPreference?.searchResultPageCustomization.suggestedSearchTerms || "";
+
   const handleSearchButtonClick = () => {
     if (query.length >= 0) {
       fetchAllResults(query, fuzzySearch, siteId, collectionIds)
