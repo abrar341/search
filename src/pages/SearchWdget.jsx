@@ -12,6 +12,20 @@ import {
 
 
 const SearchWidget = () => {
+
+
+  const [config, setConfig] = useState({ userId: "", siteId: "" });
+
+  useEffect(() => {
+    // Check if `window.appConfig` is available
+    if (window.appConfig) {
+      const { userId, siteId } = window.appConfig;
+      setConfig({ userId, siteId });
+    } else {
+      console.error("appConfig is not defined on the window object.");
+    }
+  }, []);
+
   const DEBOUNCE_DELAY = 500; // Delay in milliseconds
   const [query, setQuery] = useState("");
   const [results, setResults] = useState({ products: [], collections: [], pages: [] });
@@ -26,8 +40,8 @@ const SearchWidget = () => {
 
   useEffect(() => {
     const fetchSearchPreference = async () => {
-      const userId = "678ea507c58bddca1afec5d4";
-      const siteId = "6768b69f5fe75864249a7ce5";
+      const userId = config.userId;
+      const siteId = config.siteId;
       try {
         const preferences = await getSearchPreference(userId, siteId);
         setSearchPreference(preferences?.data);
@@ -40,11 +54,11 @@ const SearchWidget = () => {
       }
     };
     fetchSearchPreference();
-  }, []); // Fetch search preferences on component mount
+  }, [config]); // Fetch search preferences on component mount
 
   const handleSearch = async (searchQuery) => {
-    const userId = "678ea507c58bddca1afec5d4";
-    const siteId = "6768b69f5fe75864249a7ce5";
+    const userId = config.userId;
+    const siteId = config.siteId;
 
     setInstanceIsLoading(true); // Set loading state to true
 
