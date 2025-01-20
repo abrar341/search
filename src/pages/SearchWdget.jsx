@@ -26,7 +26,7 @@ const SearchWidget = () => {
 
   useEffect(() => {
     const fetchSearchPreference = async () => {
-      const userId = "678d3af66bca9dceb1ffe3a7";
+      const userId = "678ea507c58bddca1afec5d4";
       const siteId = "6768b69f5fe75864249a7ce5";
       try {
         const preferences = await getSearchPreference(userId, siteId);
@@ -43,7 +43,7 @@ const SearchWidget = () => {
   }, []); // Fetch search preferences on component mount
 
   const handleSearch = async (searchQuery) => {
-    const userId = "678d3af66bca9dceb1ffe3a7";
+    const userId = "678ea507c58bddca1afec5d4";
     const siteId = "6768b69f5fe75864249a7ce5";
 
     setInstanceIsLoading(true); // Set loading state to true
