@@ -16,7 +16,7 @@ import "./index.css";
 // Define the SearchFlowWidget initialization logic
 const SearchFlowWidget = {
   init: ({ siteId, apiUrl }) => {
-    const containerId = "searchflow-widget"; // ID for the widget container
+    const containerId = "search-widget-root"; // ID for the widget container
     let container = document.getElementById(containerId);
 
     // Dynamically create the container if it doesn't exist
