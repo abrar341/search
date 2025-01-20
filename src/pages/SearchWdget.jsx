@@ -16,11 +16,11 @@ const SearchWidget = () => {
 
   const [config, setConfig] = useState(() => {
     // Set the initial hardcoded values
-    return { userId: "453", siteId: "435" };
+    return { userId: "", siteId: "" };
   });
   useEffect(() => {
     // Check if `window.appConfig` is available
-    if (window.appConfig) {
+    if (window?.appConfig) {
       const { userId, siteId } = window.appConfig;
       setConfig({ userId, siteId });
     } else {
@@ -56,7 +56,7 @@ const SearchWidget = () => {
       }
     };
     fetchSearchPreference();
-  }, [config]); // Fetch search preferences on component mount
+  }, []); // Fetch search preferences on component mount
 
   const handleSearch = async (searchQuery) => {
     setInstanceIsLoading(true); // Set loading state to true
