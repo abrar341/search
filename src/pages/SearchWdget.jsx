@@ -54,11 +54,10 @@ const SearchWidget = () => {
       }
     };
     fetchSearchPreference();
-  }, [config]); // Fetch search preferences on component mount
+  }, []); // Fetch search preferences on component mount
 
-  const handleSearch = async (searchQuery) => {
-    const userId = config?.userId;
-    const siteId = config?.siteId;
+  const handleSearch = async (searchQuery, userId, siteId) => {
+
 
     setInstanceIsLoading(true); // Set loading state to true
 
@@ -78,7 +77,9 @@ const SearchWidget = () => {
   // Debounced version of handleSearch
   const debouncedSearch = useCallback(
     debounce((searchQuery) => {
-      handleSearch(searchQuery);
+      const userId = config?.userId;
+      const siteId = config?.siteId;
+      handleSearch(searchQuery, userId, siteId);
     }, DEBOUNCE_DELAY),
     []
   );
