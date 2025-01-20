@@ -5,13 +5,13 @@ import { ChakraProvider } from "@chakra-ui/react";
 import "./index.css";
 
 // Render the main React application
-createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <ChakraProvider>
-      <App />
-    </ChakraProvider>
-  </StrictMode>
-);
+// createRoot(document.getElementById("root")).render(
+//   <StrictMode>
+//     <ChakraProvider>
+//       <App />
+//     </ChakraProvider>
+//   </StrictMode>
+// );
 
 // Define the SearchFlowWidget initialization logic
 const SearchFlowWidget = {
