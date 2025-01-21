@@ -62,8 +62,11 @@ const SearchWidget = () => {
 
   const handleSearch = async (searchQuery) => {
     setInstanceIsLoading(true); // Set loading state to true
-    const userId = config.userId;
-    const siteId = config.siteId;
+    if (window.appConfig) {
+      const { userId, siteId } = window.appConfig;
+    } else {
+      console.error("appConfig is not defined on the window object.");
+    }
     try {
       const data = await search(searchQuery, userId, siteId);
       setSearchResults(data?.data);
