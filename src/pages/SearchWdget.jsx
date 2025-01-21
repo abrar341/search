@@ -43,8 +43,8 @@ const SearchWidget = () => {
 
   useEffect(() => {
     const fetchSearchPreference = async () => {
-      const userId = config?.userId;
-      const siteId = config?.siteId;
+      const userId = window?.appConfig.userId;
+      const siteId = window?.appConfig.siteId;
       try {
         const preferences = await getSearchPreference(userId, siteId);
         setSearchPreference(preferences?.data);
@@ -99,12 +99,6 @@ const SearchWidget = () => {
       setShowResults(true); // Show results only when the button is clicked
     }
     onClose()
-  };
-
-  const handleCloseResults = () => {
-    setShowResults(false);
-    setQuery(""); // Optionally clear the query
-    setSearchResults([]); // Optionally clear results
   };
 
   const fetchAllResults = async (query, fuzzySearch, siteId, collectionIds) => {
