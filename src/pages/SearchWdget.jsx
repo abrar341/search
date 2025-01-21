@@ -45,8 +45,10 @@ const SearchWidget = () => {
 
   useEffect(() => {
     const fetchSearchPreference = async () => {
-      const userId = config.userId;
-      const siteId = config.siteId;
+      // const userId = config.userId;
+      // const siteId = config.siteId;
+      const { userId, siteId } = window.appConfig;
+
       try {
         const preferences = await getSearchPreference(userId, siteId);
         setSearchPreference(preferences?.data);
