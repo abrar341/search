@@ -62,8 +62,8 @@ const SearchWidget = () => {
 
   const handleSearch = async (searchQuery) => {
     setInstanceIsLoading(true); // Set loading state to true
-    const userId = config?.userId;
-    const siteId = config?.siteId;
+    const userId = config.userId;
+    const siteId = config.siteId;
     try {
       const data = await search(searchQuery, userId, siteId);
       setSearchResults(data?.data);
