@@ -18,10 +18,12 @@ const SearchWidget = () => {
     // Set the initial hardcoded values
     return { userId: "", siteId: "" };
   });
+  console.log("config", config);
   useEffect(() => {
     // Check if `window.appConfig` is available
     if (window.appConfig) {
       const { userId, siteId } = window.appConfig;
+
       setConfig({ userId, siteId });
     } else {
       console.error("appConfig is not defined on the window object.");
@@ -43,8 +45,8 @@ const SearchWidget = () => {
 
   useEffect(() => {
     const fetchSearchPreference = async () => {
-      const userId = window?.appConfig.userId;
-      const siteId = window?.appConfig.siteId;
+      const userId = config.userId;
+      const siteId = config.siteId;
       try {
         const preferences = await getSearchPreference(userId, siteId);
         setSearchPreference(preferences?.data);
