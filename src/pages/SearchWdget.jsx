@@ -64,16 +64,16 @@ const SearchWidget = () => {
     setInstanceIsLoading(true); // Set loading state to true
     if (window.appConfig) {
       const { userId, siteId } = window.appConfig;
+      try {
+        const data = await search(searchQuery, userId, siteId);
+        setSearchResults(data?.data);
+      } catch (error) {
+        console.error("Error calling search API:", error);
+      } finally {
+        setInstanceIsLoading(false); // Set loading state to false
+      }
     } else {
       console.error("appConfig is not defined on the window object.");
-    }
-    try {
-      const data = await search(searchQuery, userId, siteId);
-      setSearchResults(data?.data);
-    } catch (error) {
-      console.error("Error calling search API:", error);
-    } finally {
-      setInstanceIsLoading(false); // Set loading state to false
     }
   };
   // Debounced version of handleSearch
