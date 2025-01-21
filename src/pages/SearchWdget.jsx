@@ -23,12 +23,28 @@ const SearchWidget = () => {
     // Check if `window.appConfig` is available
     if (window.appConfig) {
       const { userId, siteId } = window.appConfig;
-
       setConfig({ userId, siteId });
     } else {
       console.error("appConfig is not defined on the window object.");
       // setConfig({ userId: "678ea507c58bddca1afec5d4", siteId: "6768b69f5fe75864249a7ce5" });
     }
+
+    const fetchSearchPreference = async () => {
+      // const userId = config.userId;
+      // const siteId = config.siteId;
+
+      try {
+        const { userId, siteId } = window.appConfig;
+        const preferences = await getSearchPreference(userId, siteId);
+        setSearchPreference(preferences?.data);
+        // Fetching top search terms
+        const searchTerms = await getTopSearchTerms(userId, siteId, 5);
+        setSearchTerms(searchTerms?.data); // Assuming you have a state for top search terms
+      } catch (error) {
+        console.error("Error fetching search preferences:", error);
+      }
+    };
+    fetchSearchPreference();
   }, []);
 
   const DEBOUNCE_DELAY = 500; // Delay in milliseconds
@@ -43,24 +59,10 @@ const SearchWidget = () => {
   const { isOpen, onClose, onOpen } = useDisclosure();
 
 
-  useEffect(() => {
-    const fetchSearchPreference = async () => {
-      // const userId = config.userId;
-      // const siteId = config.siteId;
-      const { userId, siteId } = window.appConfig;
+  // useEffect(() => {
+  //   const { userId, siteId } = window.appConfig;
 
-      try {
-        const preferences = await getSearchPreference(userId, siteId);
-        setSearchPreference(preferences?.data);
-        // Fetching top search terms
-        const searchTerms = await getTopSearchTerms(userId, siteId, 5);
-        setSearchTerms(searchTerms?.data); // Assuming you have a state for top search terms
-      } catch (error) {
-        console.error("Error fetching search preferences:", error);
-      }
-    };
-    fetchSearchPreference();
-  }, []); // Fetch search preferences on component mount
+  // }, []); // Fetch search preferences on component mount
 
   const handleSearch = async (searchQuery, userId, siteId) => {
     setInstanceIsLoading(true); // Set loading state to true
