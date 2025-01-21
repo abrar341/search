@@ -60,26 +60,24 @@ const SearchWidget = () => {
     fetchSearchPreference();
   }, []); // Fetch search preferences on component mount
 
-  const handleSearch = async (searchQuery) => {
+  const handleSearch = async (searchQuery, userId, siteId) => {
     setInstanceIsLoading(true); // Set loading state to true
-    if (window.appConfig) {
-      const { userId, siteId } = window.appConfig;
-      try {
-        const data = await search(searchQuery, userId, siteId);
-        setSearchResults(data?.data);
-      } catch (error) {
-        console.error("Error calling search API:", error);
-      } finally {
-        setInstanceIsLoading(false); // Set loading state to false
-      }
-    } else {
-      console.error("appConfig is not defined on the window object.");
+    console.log("userId, siteId", userId, siteId);
+
+    try {
+      const data = await search(searchQuery, userId, siteId);
+      setSearchResults(data?.data);
+    } catch (error) {
+      console.error("Error calling search API:", error);
+    } finally {
+      setInstanceIsLoading(false); // Set loading state to false
     }
+
   };
   // Debounced version of handleSearch
   const debouncedSearch = useCallback(
-    debounce((searchQuery) => {
-      handleSearch(searchQuery);
+    debounce((searchQuery, userId, siteId) => {
+      handleSearch(searchQuery, userId, siteId);
     }, DEBOUNCE_DELAY),
     []
   );
@@ -87,7 +85,14 @@ const SearchWidget = () => {
     const value = e.target.value;
     setQuery(value);
     // Call the debounced search function
-    debouncedSearch(value);
+    if (window.appConfig) {
+      const { userId, siteId } = window.appConfig;
+      console.log("window.appConfig", window.appConfig);
+
+      debouncedSearch(value, userId, siteId);
+    } else {
+      console.error("appConfig is not defined on the window object.");
+    }
   };
   // console.log("searchPreference", searchPreference);
   const fuzzySearch = searchPreference?.searchEngineSettings?.fuzzySearch;
