@@ -13,13 +13,13 @@ import SearchPageModal from "./SearchPageModel";
 
 const SearchWidget = () => {
 
-  // if (!window.appConfig) {
-  //   window.appConfig = {};
-  // }
+  if (!window.appConfig) {
+    window.appConfig = {};
+  }
 
-  // // Set properties on appConfig
-  // window.appConfig.userId = "678fb2a38972bb081ed9eb3b"; // Replace with actual user ID
-  // window.appConfig.siteId = "6768b69f5fe75864249a7ce5"; // Replace with actual site ID
+  // Set properties on appConfig
+  window.appConfig.userId = "678fb2a38972bb081ed9eb3b"; // Replace with actual user ID
+  window.appConfig.siteId = "6768b69f5fe75864249a7ce5"; // Replace with actual site ID
 
   const [config, setConfig] = useState(() => {
     // Set the initial hardcoded values
@@ -49,9 +49,9 @@ const SearchWidget = () => {
     fetchSearchPreference();
   }, []);
 
-  useEffect(() => {
-    onOpen()
-  }, []);
+  // useEffect(() => {
+  //   onOpen()
+  // }, []);
 
   const DEBOUNCE_DELAY = 500; // Delay in milliseconds
   const [query, setQuery] = useState("");
@@ -77,6 +77,8 @@ const SearchWidget = () => {
     }
 
   };
+
+
   // Debounced version of handleSearch
   const debouncedSearch = useCallback(
     debounce((searchQuery, userId, siteId) => {
@@ -148,6 +150,21 @@ const SearchWidget = () => {
     SearchSuggestedSearchTerms: SearchSuggestedSearchTerms,
     searchTerms: searchTerms,
   }
+  // Listen for the custom event from Webflow
+  useEffect(() => {
+    const handleWidgetOpen = () => {
+      onOpen(); // Call onOpen from useDisclosure when the event is triggered
+    };
+
+    // Add event listener for the custom event
+    window.addEventListener("widgetOpen", handleWidgetOpen);
+
+    // Cleanup the event listener when the component unmounts
+    return () => {
+      window.removeEventListener("widgetOpen", handleWidgetOpen);
+    };
+  }, [onOpen]);
+
   return (
     <div className="w-full">
       <SearchModal
