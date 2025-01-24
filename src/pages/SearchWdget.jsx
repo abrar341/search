@@ -167,6 +167,7 @@ const SearchWidget = () => {
 
   return (
     <div className="w-full">
+
       <SearchModal
         ShowInstance={ShowInstance}
         openSearchPageModal={openSearchPageModal}
