@@ -127,22 +127,31 @@ const SearchModal = ({
                       {searchResults
                         .find((category) => category.searchFrom === "Products")
                         ?.results.map((result, index) => (
-                          <Flex
-                            key={index}
-                            bg="whiteAlpha.700"
-                            p={4}
-                            borderRadius="md"
-                            boxShadow="sm"
-                            _hover={{ boxShadow: "md", bg: "whiteAlpha.900" }}
-                            cursor="pointer"
-                            alignItems="center"
-                            gap={4}
-                            mb={0}
+                          <Link
+                            href={result?.productURL || "#"}
+                            isExternal
                           >
-                            <Text fontWeight="medium">
-                              {result?.fieldData?.name || "Unnamed Product"}
-                            </Text>
-                          </Flex>
+                            <Flex
+                              key={index}
+                              bg="whiteAlpha.700"
+                              p={4}
+                              borderRadius="md"
+                              boxShadow="sm"
+
+                              cursor="pointer"
+                              alignItems="center"
+                              gap={4}
+                              mb={0}
+                            >
+
+                              <Text
+                                fontWeight="medium"
+                                _hover={{ textDecoration: "underline" }}
+                              >
+                                {result?.fieldData?.name || "Unnamed Product"}
+                              </Text>
+                            </Flex>
+                          </Link>
                         ))}
                     </Grid>
                     {/* <Text
@@ -209,9 +218,15 @@ const SearchModal = ({
                         {searchResults
                           .find((category) => category.searchFrom === "Pages")
                           ?.results.map((result, index) => (
-                            <Text key={index} fontWeight="medium" mb={2}>
-                              {result?.pageTitle || "Unnamed Page"}
-                            </Text>
+                            <Link
+                              href={result?.URL || "#"}
+                              isExternal
+                            >
+
+                              <Text key={index} fontWeight="medium" mb={2}>
+                                {result?.pageTitle || "Unnamed Page"}
+                              </Text>
+                            </Link>
                           ))}
                       </Box>
                     </VStack>
