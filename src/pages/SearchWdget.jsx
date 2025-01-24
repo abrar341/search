@@ -13,13 +13,13 @@ import SearchPageModal from "./SearchPageModel";
 
 const SearchWidget = () => {
 
-  if (!window.appConfig) {
-    window.appConfig = {};
-  }
+  // if (!window.appConfig) {
+  //   window.appConfig = {};
+  // }
 
-  // Set properties on appConfig
-  window.appConfig.userId = "678fb2a38972bb081ed9eb3b"; // Replace with actual user ID
-  window.appConfig.siteId = "6768b69f5fe75864249a7ce5"; // Replace with actual site ID
+  // // Set properties on appConfig
+  // window.appConfig.userId = "678fb2a38972bb081ed9eb3b"; // Replace with actual user ID
+  // window.appConfig.siteId = "6768b69f5fe75864249a7ce5"; // Replace with actual site ID
 
   const [config, setConfig] = useState(() => {
     // Set the initial hardcoded values

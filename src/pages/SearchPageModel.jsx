@@ -92,7 +92,8 @@ const SearchPageModal = ({
             >
                 <ModalHeader textAlign="center" fontWeight="bold" pb={0}>SEARCH RESULTS</ModalHeader>
                 <ModalBody p={4}>
-                    <Flex width="100%" mb={4} gap={2}>
+                    <Flex px={3}
+                        width="100%" mb={4} gap={2}>
                         <Input
                             value={searchQuery || ""}
                             onChange={handleInputChange}
