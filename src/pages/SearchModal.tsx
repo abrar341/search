@@ -15,15 +15,15 @@ import {
   Divider,
   Grid,
   GridItem,
-  Image,
+  Link,
 } from "@chakra-ui/react";
 import React, { useState } from "react";
 
 const SearchModal = ({
+  isSearchPageModalOpen,
   onClose,
   isOpen,
   searchResults,
-  handleSearch,
   searchQuery,
   setSearchQuery,
   instantSearchWidgetCustomization,
@@ -31,26 +31,12 @@ const SearchModal = ({
   handleInputChange,
   instanceIsLoading,
   searchTerms,
-  InstanceSuggestedSearchTerms
+  InstanceSuggestedSearchTerms,
+  openSearchPageModal
 }) => {
-  // const handleInputChange = (e) => {
-  //   const value = e.target.value || ""; // Default to empty string
-  //   setSearchQuery(value);
-
-  //   if (value.trim().length >= 3) {
-  //     handleSearch(value.trim());
-  //   }
-  // };
-
-  // const handleSearchButtonClick = () => {
-  //   if ((searchQuery || "").trim().length >= 3) {
-  //     handleSearch(searchQuery.trim());
-  //   }
-  // };
 
   const isOneColumnLayout =
     instantSearchWidgetCustomization?.searchResultLayout === "one-column";
-
   return (
     <Modal onClose={onClose} size="6xl" isOpen={isOpen}>
       <ModalOverlay bg="rgba(0, 0, 0, 0.4)" backdropFilter="blur(5px)" />
@@ -77,7 +63,12 @@ const SearchModal = ({
             <Button
               mt={1}
               colorScheme="blue"
-              onClick={handleSearchButtonClick}
+              onClick={() => {
+                handleSearchButtonClick()
+                if (!isSearchPageModalOpen) {
+                  openSearchPageModal()
+                }
+              }}
               isDisabled={(searchQuery || "").trim().length <= 0}
             >
               Search
@@ -130,37 +121,33 @@ const SearchModal = ({
                     {searchResults
                       .find((category) => category.searchFrom === "Products")
                       ?.results.map((result, index) => (
-                        <Flex
-                          key={index}
-                          bg="whiteAlpha.700"
-                          p={4}
-                          borderRadius="md"
-                          boxShadow="sm"
-                          _hover={{ boxShadow: "md", bg: "whiteAlpha.900" }}
-                          cursor="pointer"
-                          alignItems="center"
-                          gap={4}
-                          mb={0}
+                        <Link
+                          href={result?.productURL || "#"}
+                          isExternal
                         >
-                          <Text fontWeight="medium">
-                            {result?.fieldData?.name || "Unnamed Product"}
-                          </Text>
-                        </Flex>
+                          <Flex
+                            key={index}
+                            bg="whiteAlpha.700"
+                            p={4}
+                            borderRadius="md"
+                            boxShadow="sm"
+
+                            cursor="pointer"
+                            alignItems="center"
+                            gap={4}
+                            mb={0}
+                          >
+
+                            <Text
+                              fontWeight="medium"
+                              _hover={{ textDecoration: "underline" }}
+                            >
+                              {result?.fieldData?.name || "Unnamed Product"}
+                            </Text>
+                          </Flex>
+                        </Link>
                       ))}
                   </Grid>
-                  {/* <Text
-                    pb={4}
-                    fontSize="sm"
-                    fontWeight="bold"
-                    color="blue.500"
-                    textAlign="center"
-                    cursor="pointer"
-                    onClick={() => {
-                      console.log("View all products clicked");
-                    }}
-                  >
-                    View all products →
-                  </Text> */}
                 </VStack>
               </GridItem>
 
@@ -212,9 +199,14 @@ const SearchModal = ({
                       {searchResults
                         .find((category) => category.searchFrom === "Pages")
                         ?.results.map((result, index) => (
-                          <Text key={index} fontWeight="medium" mb={2}>
-                            {result?.pageTitle || "Unnamed Page"}
-                          </Text>
+                          <Link
+                            href={result?.URL || "#"}
+                            isExternal
+                          >
+                            <Text key={index} fontWeight="medium" mb={2}>
+                              {result?.pageTitle || "Unnamed Page"}
+                            </Text>
+                          </Link>
                         ))}
                     </Box>
                   </VStack>

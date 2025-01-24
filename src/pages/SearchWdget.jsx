@@ -3,22 +3,28 @@ import SearchModal from "./SearchModal";
 import { useDisclosure } from "@chakra-ui/react";
 import { search } from "../apiManager/search";
 import { getSearchPreference, getTopSearchTerms } from "../apiManager/setting";
-import SearchResultPage from "./SearchResultPage";
 import {
   searchFromCollections,
   searchFromProducts,
   searchFromPages,
 } from "../apiManager/search";
+import SearchPageModal from "./SearchPageModel";
 
 
 const SearchWidget = () => {
 
+  // if (!window.appConfig) {
+  //   window.appConfig = {};
+  // }
+
+  // // Set properties on appConfig
+  // window.appConfig.userId = "678fb2a38972bb081ed9eb3b"; // Replace with actual user ID
+  // window.appConfig.siteId = "6768b69f5fe75864249a7ce5"; // Replace with actual site ID
 
   const [config, setConfig] = useState(() => {
     // Set the initial hardcoded values
     return { userId: "", siteId: "" };
   });
-  console.log("config", config);
   useEffect(() => {
     // Check if `window.appConfig` is available
     if (window.appConfig) {
@@ -26,13 +32,9 @@ const SearchWidget = () => {
       setConfig({ userId, siteId });
     } else {
       console.error("appConfig is not defined on the window object.");
-      // setConfig({ userId: "678ea507c58bddca1afec5d4", siteId: "6768b69f5fe75864249a7ce5" });
     }
 
     const fetchSearchPreference = async () => {
-      // const userId = config.userId;
-      // const siteId = config.siteId;
-
       try {
         const { userId, siteId } = window.appConfig;
         const preferences = await getSearchPreference(userId, siteId);
@@ -47,6 +49,10 @@ const SearchWidget = () => {
     fetchSearchPreference();
   }, []);
 
+  useEffect(() => {
+    onOpen()
+  }, []);
+
   const DEBOUNCE_DELAY = 500; // Delay in milliseconds
   const [query, setQuery] = useState("");
   const [results, setResults] = useState({ products: [], collections: [], pages: [] });
@@ -57,17 +63,10 @@ const SearchWidget = () => {
   const [searchPreference, setSearchPreference] = useState(null); // State to hold search preferences
   const [showResults, setShowResults] = useState(false); // State to toggle results display
   const { isOpen, onClose, onOpen } = useDisclosure();
-
-
-  // useEffect(() => {
-  //   const { userId, siteId } = window.appConfig;
-
-  // }, []); // Fetch search preferences on component mount
+  const { isOpen: isSearchPageModalOpen, onOpen: openSearchPageModal, onClose: closeSearchPageModal } = useDisclosure();
 
   const handleSearch = async (searchQuery, userId, siteId) => {
     setInstanceIsLoading(true); // Set loading state to true
-    console.log("userId, siteId", userId, siteId);
-
     try {
       const data = await search(searchQuery, userId, siteId);
       setSearchResults(data?.data);
@@ -91,19 +90,16 @@ const SearchWidget = () => {
     // Call the debounced search function
     if (window.appConfig) {
       const { userId, siteId } = window.appConfig;
-      console.log("window.appConfig", window.appConfig);
-
       debouncedSearch(value, userId, siteId);
     } else {
       console.error("appConfig is not defined on the window object.");
     }
   };
-  // console.log("searchPreference", searchPreference);
   const fuzzySearch = searchPreference?.searchEngineSettings?.fuzzySearch;
   const siteId = searchPreference?.siteId;
-  const userId = searchPreference?.userId;
   const collectionIds = searchPreference?.searchFrom?.collections || [];
   const searchResultLayout = searchPreference?.searchResultPageCustomization?.searchResultLayout || "";
+  const ShowInstance = searchPreference?.searchEngineSettings.instantSearchWidget || "";
   const InstanceSuggestedSearchTerms = searchPreference?.instantSearchWidgetCustomization.suggestedSearchTerms || "";
   const SearchSuggestedSearchTerms = searchPreference?.searchResultPageCustomization.suggestedSearchTerms || "";
 
@@ -116,13 +112,10 @@ const SearchWidget = () => {
   };
 
   const fetchAllResults = async (query, fuzzySearch, siteId, collectionIds) => {
-
     setIsLoading(true);
     try {
       const page = 1; // Set your pagination page
       const pageSize = 3; // Set your pagination size
-      // const collectionIds = ["6768b6a05fe75864249a7d99", "6768b6a05fe75864249a7d6b"];
-
       const [products, collections, pages] = await Promise.all([
         searchFromProducts(siteId, query, fuzzySearch, page, pageSize),
         searchFromCollections(collectionIds, query, fuzzySearch, page, pageSize),
@@ -137,74 +130,70 @@ const SearchWidget = () => {
     }
   };
 
+  //Props things
+  const searchResultPageProps = {
+    searchResults: searchResults,  // Pass results to the SearchResultPage
+    searchQuery: query,
+    setSearchQuery: setQuery,
+    handleSearchButtonClick: handleSearchButtonClick,
+    fetchAllResults: fetchAllResults,
+    setIsLoading: setIsLoading,
+    results: results,
+    setResults: setResults,
+    isLoading: isLoading,
+    fuzzySearch: fuzzySearch,
+    siteId: siteId,
+    collectionIds: collectionIds,
+    searchResultLayout: searchResultLayout,
+    SearchSuggestedSearchTerms: SearchSuggestedSearchTerms,
+    searchTerms: searchTerms,
+  }
   return (
     <div className="w-full">
-      {searchPreference?.searchEngineSettings?.instantSearchWidget && (
-        <SearchModal
-          isOpen={isOpen}
-          onClose={onClose}
-          onOpen={onOpen}
-          searchResults={searchResults}
-          handleSearch={handleSearch}
-          searchQuery={query}
-          setSearchQuery={setQuery}
-          initialQuery={query} // Pass query as initialQuery
-          instantSearchWidgetCustomization={
-            searchPreference?.instantSearchWidgetCustomization
-          }
-          handleSearchButtonClick={handleSearchButtonClick}
-          handleInputChange={handleInputChange}
-          instanceIsLoading={instanceIsLoading}
-          searchTerms={searchTerms}
-          InstanceSuggestedSearchTerms={InstanceSuggestedSearchTerms}
-        />
-      )}
-
-      {/* Input and Search Button */}
-      <div className="flex w-full mt-2 md:w-1/2 mx-auto items-center">
-        <input
-          type="text"
-          value={query}
-          onChange={handleInputChange}
-          placeholder="Search..."
-          onClick={() => {
-            onOpen();
-          }}
-          className="w-full flex-grow px-4 py-3 h-12 border border-gray-300 rounded-l-xl text-lg outline-none"
-        />
-        <button
-          onClick={handleSearchButtonClick}
-          className="px-4 py-3 h-12 bg-blue-600 text-white rounded-r-xl flex items-center justify-center hover:bg-blue-700"
-        >
-          Search
-        </button>
-      </div>
-
-      {/* Conditionally Render Search Results */}
-      {showResults && (
-        <SearchResultPage
-          searchResults={searchResults}  // Pass results to the SearchResultPage
-          searchQuery={query}
-          setSearchQuery={setQuery}
-          handleSearchButtonClick={handleSearchButtonClick}
-          fetchAllResults={fetchAllResults}
-          setIsLoading={setIsLoading}
-          results={results}
-          setResults={setResults}
-          isLoading={isLoading}
-          fuzzySearch={fuzzySearch}
-          siteId={siteId}
-          collectionIds={collectionIds}
-          searchResultLayout={searchResultLayout}
-          SearchSuggestedSearchTerms={SearchSuggestedSearchTerms}
-          searchTerms={searchTerms}
-
-        />
-      )}
+      <SearchModal
+        ShowInstance={ShowInstance}
+        openSearchPageModal={openSearchPageModal}
+        isSearchPageModalOpen={isSearchPageModalOpen}
+        isOpen={isOpen}
+        onClose={onClose}
+        onOpen={onOpen}
+        searchResults={searchResults}
+        handleSearch={handleSearch}
+        searchQuery={query}
+        setSearchQuery={setQuery}
+        initialQuery={query} // Pass query as initialQuery
+        instantSearchWidgetCustomization={
+          searchPreference?.instantSearchWidgetCustomization
+        }
+        handleSearchButtonClick={handleSearchButtonClick}
+        handleInputChange={handleInputChange}
+        instanceIsLoading={instanceIsLoading}
+        searchTerms={searchTerms}
+        InstanceSuggestedSearchTerms={InstanceSuggestedSearchTerms}
+      />
+      <SearchPageModal
+        CloseInstance={onClose}
+        isOpen={isSearchPageModalOpen}
+        onClose={closeSearchPageModal}
+        onOpen={openSearchPageModal}
+        searchResults={searchResults}
+        handleSearch={handleSearch}
+        searchQuery={query}
+        setSearchQuery={setQuery}
+        initialQuery={query} // Pass query as initialQuery
+        instantSearchWidgetCustomization={
+          searchPreference?.instantSearchWidgetCustomization
+        }
+        handleSearchButtonClick={handleSearchButtonClick}
+        handleInputChange={handleInputChange}
+        instanceIsLoading={instanceIsLoading}
+        searchTerms={searchTerms}
+        InstanceSuggestedSearchTerms={InstanceSuggestedSearchTerms}
+        {...searchResultPageProps}
+      />
     </div>
   );
 };
-
 
 // Utility debounce function
 function debounce(func, wait) {
