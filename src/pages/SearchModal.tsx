@@ -198,9 +198,14 @@ const SearchModal = ({
                             (category) => category.searchFrom === "Collection Items"
                           )
                           ?.results.map((result, index) => (
-                            <Text key={index} fontWeight="medium" mb={2}>
-                              {result?.fieldData?.name || "Unnamed Collection"}
-                            </Text>
+                            <Link
+                              href={result?.itemURL || "#"}
+                              isExternal
+                            >
+                              <Text key={index} fontWeight="medium" mb={2}>
+                                {result?.fieldData?.name || "Unnamed Collection"}
+                              </Text>
+                            </Link>
                           ))}
                       </Box>
 

@@ -185,10 +185,13 @@ const SearchPageModal = ({
                                             <Link
                                                 href={
                                                     activeTab === "Pages"
-                                                        ? item?.URL || "#" // Use `pageURL` for pages
-                                                        : item?.productURL || "#" // Use `productURL` for products
+                                                        ? item?.URL || "#"
+                                                        : activeTab === "Products"
+                                                            ? item?.productURL || "#"
+                                                            : item?.itemURL || "#"
                                                 }
                                                 isExternal
+
                                             >
                                                 <h3 className="text-lg font-semibold text-gray-800 truncate">
                                                     {activeTab === "Pages"
