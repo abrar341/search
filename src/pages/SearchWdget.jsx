@@ -117,7 +117,7 @@ const SearchWidget = () => {
     setIsLoading(true);
     try {
       const page = 1; // Set your pagination page
-      const pageSize = 3; // Set your pagination size
+      const pageSize = 9; // Set your pagination size
       const [products, collections, pages] = await Promise.all([
         searchFromProducts(siteId, query, fuzzySearch, page, pageSize),
         searchFromCollections(collectionIds, query, fuzzySearch, page, pageSize),
