@@ -215,6 +215,7 @@ const SearchPageModal = ({
                                                     color="blue.600"
                                                     textTransform="uppercase"
                                                     mb={2}
+
                                                 >
                                                     Suggessted Terms
                                                 </Text>

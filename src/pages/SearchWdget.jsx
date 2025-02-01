@@ -18,7 +18,7 @@ const SearchWidget = () => {
   // }
 
   // // Set properties on appConfig
-  // window.appConfig.userId = "678fb2a38972bb081ed9eb3b"; // Replace with actual user ID
+  // window.appConfig.userId = "679ce5fbcb8ebf5a10f0e66f"; // Replace with actual user ID
   // window.appConfig.siteId = "6768b69f5fe75864249a7ce5"; // Replace with actual site ID
 
   const [config, setConfig] = useState(() => {
@@ -167,7 +167,9 @@ const SearchWidget = () => {
 
   return (
     <div className="w-full">
-
+      {/* <button onClick={() => onOpen()}>
+        Search
+      </button> */}
       <SearchModal
         ShowInstance={ShowInstance}
         openSearchPageModal={openSearchPageModal}
