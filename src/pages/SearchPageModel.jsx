@@ -90,7 +90,7 @@ const SearchPageModal = ({
                 height="100vh"
                 overflow="hidden"
             >
-                <ModalHeader textAlign="center" fontWeight="bold" pb={0}>SEARCH RESULTS</ModalHeader>
+                <ModalHeader textAlign="center" fontWeight="bold" pb={0}>Search Results</ModalHeader>
                 <ModalBody p={4}>
                     <Flex px={3}
                         width="100%" mb={4} gap={2}>

@@ -51,9 +51,7 @@ const SearchModal = ({
         maxHeight="80vh"
         overflow="hidden"
       >
-
-        <ModalHeader textAlign="center" sx={{ color: "var(--searchflow-head, #1a1a1a)", textTransform: "none" }}
-          fontWeight="bold" pb={0}>Search</ModalHeader>
+        <ModalHeader textAlign="center" fontWeight="bold" pb={0}>Search</ModalHeader>
         <ModalBody p={4}>
           <Flex width="100%" mb={4} gap={2}>
             <Input
@@ -73,8 +71,6 @@ const SearchModal = ({
                   openSearchPageModal()
                 }
               }}
-              sx={{ color: "var(--searchflow-btn-txt, #ffffff)", background: "var(--searchflow-btn-bg,rgb(101, 24, 224))", textTransform: "none" }}
-
               isDisabled={(searchQuery || "").trim().length <= 0}
             >
               Search
@@ -151,7 +147,6 @@ const SearchModal = ({
                               <Text
                                 fontWeight="medium"
                                 _hover={{ textDecoration: "underline" }}
-                                sx={{ color: "var(--searchflow-txt, #333)", textTransform: "none" }}
                               >
                                 {result?.fieldData?.name || "Unnamed Product"}
                               </Text>
@@ -207,7 +202,7 @@ const SearchModal = ({
                               href={result?.itemURL || "#"}
                               isExternal
                             >
-                              <Text key={index} fontWeight="medium" sx={{ color: "var(--searchflow-txt, #333)", textTransform: "none" }} mb={2}>
+                              <Text key={index} fontWeight="medium" mb={2}>
                                 {result?.fieldData?.name || "Unnamed Collection"}
                               </Text>
                             </Link>
@@ -233,7 +228,7 @@ const SearchModal = ({
                               isExternal
                             >
 
-                              <Text key={index} fontWeight="medium" sx={{ color: "var(--searchflow-txt, #333)", textTransform: "none" }} mb={2}>
+                              <Text key={index} fontWeight="medium" mb={2}>
                                 {result?.pageTitle || "Unnamed Page"}
                               </Text>
                             </Link>
@@ -246,7 +241,7 @@ const SearchModal = ({
             ) : (
               !instanceIsLoading && searchResults.every(category => category.results.length === 0) && ShowInstance && (
                 <>
-                  <Text mb={4} sx={{ color: "var(--searchflow-txt, #333)", textTransform: "none" }} mt={4} ml={1} fontSize="sm" color="gray.500">
+                  <Text mb={4} mt={4} ml={1} fontSize="sm" color="gray.500">
                     No results found.
                   </Text>
                   {/* Suggessted term show */}
