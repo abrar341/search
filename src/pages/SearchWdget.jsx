@@ -18,7 +18,7 @@ const SearchWidget = () => {
   // }
 
   // // Set properties on appConfig
-  // window.appConfig.userId = "678fb2a38972bb081ed9eb3b"; // Replace with actual user ID
+  // window.appConfig.userId = "679f4a91a716d645bb43495f"; // Replace with actual user ID
   // window.appConfig.siteId = "6768b69f5fe75864249a7ce5"; // Replace with actual site ID
 
   const [config, setConfig] = useState(() => {
@@ -58,6 +58,7 @@ const SearchWidget = () => {
   const [results, setResults] = useState({ products: [], collections: [], pages: [] });
   const [isLoading, setIsLoading] = useState(false);
   const [instanceIsLoading, setInstanceIsLoading] = useState(false);
+  const [noResult, setNoResult] = useState(false)
   const [searchResults, setSearchResults] = useState([]); // State to hold search results
   const [searchTerms, setSearchTerms] = useState([]); // State to hold search results
   const [searchPreference, setSearchPreference] = useState(null); // State to hold search preferences
@@ -74,6 +75,7 @@ const SearchWidget = () => {
       console.error("Error calling search API:", error);
     } finally {
       setInstanceIsLoading(false); // Set loading state to false
+      setNoResult(true)
     }
 
   };
@@ -167,8 +169,13 @@ const SearchWidget = () => {
 
   return (
     <div className="w-full">
-
+      {/* <button onClick={() => {
+        onOpen()
+      }}>
+        Search
+      </button> */}
       <SearchModal
+        noResult={noResult}
         ShowInstance={ShowInstance}
         openSearchPageModal={openSearchPageModal}
         isSearchPageModalOpen={isSearchPageModalOpen}

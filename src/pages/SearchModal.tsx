@@ -20,6 +20,7 @@ import {
 import React, { useState } from "react";
 
 const SearchModal = ({
+  noResult,
   ShowInstance,
   isSearchPageModalOpen,
   onClose,
@@ -241,9 +242,12 @@ const SearchModal = ({
             ) : (
               !instanceIsLoading && searchResults.every(category => category.results.length === 0) && ShowInstance && (
                 <>
-                  <Text mb={4} mt={4} ml={1} fontSize="sm" color="gray.500">
-                    No results found.
-                  </Text>
+                  {
+                    searchResults.every(category => category.results.length === 0) && searchQuery !== "" && !instanceIsLoading && noResult &&
+                    <Text mb={4} mt={4} ml={1} fontSize="sm" color="gray.500">
+                      No results found.
+                    </Text>
+                  }
                   {/* Suggessted term show */}
                   {
                     InstanceSuggestedSearchTerms &&
@@ -260,7 +264,6 @@ const SearchModal = ({
                         </Text>
                       </div>
                       <Divider borderColor="gray.300" mb={4} />
-
 
                       <div className="flex gap-4 justify-center items-center flex-wrap">
                         {searchTerms.map((term, index) => (
@@ -315,7 +318,7 @@ const SearchModal = ({
 
         </ModalFooter>
       </ModalContent>
-    </Modal>
+    </Modal >
   );
 };
 
